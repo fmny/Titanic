@@ -4,6 +4,7 @@ Utilisation de la fonction Rpart sur les passagers du Titanic pour créer un arb
 
 ## twanmal veut aussi y participer
 ## Francis téléphone
+## Francis a repris le travail
 
 
 
