@@ -1,10 +1,6 @@
 # Titanic-Rpart (arbre décisionnel)
-## ajout de ligne ##
-Utilisation de la fonction Rpart sur les passagers du Titanic pour créer un arbre décisionnel afin de prédire la survie des passagers en fonction des autres variables (sexe ,âge, classe tarifaire, nombre de personnes de la même famille à bord et nombre de parent ou d'enfant à bord)
 
-## twanmal veut aussi y participer
-## Francis téléphone
-## Francis a repris le travail
+Utilisation de la fonction Rpart sur les passagers du Titanic pour créer un arbre décisionnel afin de prédire la survie des passagers en fonction des autres variables (sexe ,âge, classe tarifaire, nombre de personnes de la même famille à bord et nombre de parent ou d'enfant à bord)
 
 
 
