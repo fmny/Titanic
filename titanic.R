@@ -22,8 +22,15 @@
 library(rpart)
 library(rpart.plot)
 data(ptitanic)
+library()
 
-library(tcltk)
+choose_directory = function(caption = 'Select data directory') {
+  if (exists('utils::choose.dir')) {
+    choose.dir(caption = caption) 
+  } else {
+    tk_choose.dir(caption = caption)
+  }
+}library(tcltk)
 data(ptitanic)
 ###what is your working directory####
 choose_directory = function(caption = 'Select data directory') {
