@@ -12,3 +12,5 @@ Utilisation de la fonction Rpart sur les passagers du Titanic pour créer un arb
 ![Arbre titanic optimal](http://apiacoa.org/blog/2014/02/initiation-a-rpart.fr.html)
 
 [Initiation rpart](http://apiacoa.org/blog/2014/02/initiation-a-rpart.fr.html)
+
+[francis](https://github.com/fmny/Titanic/blob/dev/initiation-rpart.html)
