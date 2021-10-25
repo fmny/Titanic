@@ -6,6 +6,7 @@ Utilisation de la fonction Rpart sur les passagers du Titanic pour créer un arb
 ## Francis téléphone
 
 
+
 ![Arbre titanic optimal](https://github.com/fmny/Titanic/blob/main/Arbre%20titanic.jpeg)
 
 
