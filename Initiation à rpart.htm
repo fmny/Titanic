@@ -1,0 +1,763 @@
+<html>
+
+<head>
+<meta http-equiv=Content-Type content="text/html; charset=windows-1252">
+<meta name=Generator content="Microsoft Word 15 (filtered)">
+<style>
+<!--
+ /* Font Definitions */
+ @font-face
+	{font-family:Helvetica;
+	panose-1:2 11 6 4 2 2 2 2 2 4;}
+@font-face
+	{font-family:Wingdings;
+	panose-1:5 0 0 0 0 0 0 0 0 0;}
+@font-face
+	{font-family:"Cambria Math";
+	panose-1:2 4 5 3 5 4 6 3 2 4;}
+@font-face
+	{font-family:Calibri;
+	panose-1:2 15 5 2 2 2 4 3 2 4;}
+@font-face
+	{font-family:inherit;
+	panose-1:0 0 0 0 0 0 0 0 0 0;}
+@font-face
+	{font-family:Consolas;
+	panose-1:2 11 6 9 2 2 4 3 2 4;}
+@font-face
+	{font-family:Tahoma;
+	panose-1:2 11 6 4 3 5 4 4 2 4;}
+ /* Style Definitions */
+ p.MsoNormal, li.MsoNormal, div.MsoNormal
+	{margin-top:0cm;
+	margin-right:0cm;
+	margin-bottom:10.0pt;
+	margin-left:0cm;
+	line-height:115%;
+	font-size:11.0pt;
+	font-family:"Calibri",sans-serif;}
+.MsoChpDefault
+	{font-family:"Calibri",sans-serif;}
+@page WordSection1
+	{size:595.3pt 841.9pt;
+	margin:70.85pt 70.85pt 70.85pt 70.85pt;}
+div.WordSection1
+	{page:WordSection1;}
+ /* List Definitions */
+ ol
+	{margin-bottom:0cm;}
+ul
+	{margin-bottom:0cm;}
+-->
+</style>
+
+</head>
+
+<body lang=DE-CH link=blue vlink="#954F72" style='word-wrap:break-word'>
+
+<div class=WordSection1>
+
+<p class=MsoNormal style='line-height:30.0pt'><b><span lang=FR
+style='font-size:27.0pt;font-family:"inherit",serif;color:#333333'>Initiation à
+rpart</span></b></p>
+
+<p class=MsoNormal style='margin-bottom:7.5pt;line-height:normal'><span
+lang=FR style='font-size:10.5pt;font-family:"Helvetica",sans-serif;color:#333333'>Le
+package&nbsp;</span><span lang=FR><a href="http://www.r-project.org/"><span
+style='font-size:10.5pt;font-family:"Helvetica",sans-serif;color:#0088CC'>R</span></a></span><span
+lang=FR style='font-size:10.5pt;font-family:"Helvetica",sans-serif;color:#333333'>&nbsp;<a
+href="http://cran.r-project.org/web/packages/rpart/index.html"><span
+style='color:#0088CC'>rpart</span></a>&nbsp;propose une implémentation des
+méthodes de construction d'</span><span lang=FR><a
+href="https://fr.wikipedia.org/wiki/Arbre_de_d%C3%A9cision"><span
+style='font-size:10.5pt;font-family:"Helvetica",sans-serif;color:#0088CC'>arbres
+de décision</span></a></span><span lang=FR style='font-size:10.5pt;font-family:
+"Helvetica",sans-serif;color:#333333'>&nbsp;inspirées de l'approche CART
+décrite dans l'ouvrage éponyme de Breiman, Friedman, Olshen et Stone en 1983.
+Ce billet propose une prise en main élémentaire de rpart en complément dans la
+documentation et des vignettes disponibles.</span></p>
+
+<p class=MsoNormal style='margin-top:7.5pt;margin-right:0cm;margin-bottom:7.5pt;
+margin-left:0cm;line-height:30.0pt'><b><span lang=FR style='font-size:22.5pt;
+font-family:"inherit",serif;color:#333333'>Construction de l'arbre</span></b></p>
+
+<p class=MsoNormal style='margin-top:7.5pt;margin-right:0cm;margin-bottom:7.5pt;
+margin-left:0cm;line-height:30.0pt'><b><span lang=FR style='font-size:18.0pt;
+font-family:"inherit",serif;color:#333333'>Préparation des données</span></b></p>
+
+<p class=MsoNormal style='margin-bottom:7.5pt;line-height:normal'><span
+lang=FR style='font-size:10.5pt;font-family:"Helvetica",sans-serif;color:#333333'>On
+travaille ici sur les données Titanic disponible dans le package&nbsp;<a
+href="http://cran.r-project.org/web/packages/rpart.plot/index.html"><span
+style='color:#0088CC'>rpart.plot</span></a>. On charge les deux packages puis
+les données comme ceci :</span></p>
+
+<p class=MsoNormal style='margin-bottom:7.5pt;line-height:15.0pt;background:
+whitesmoke;word-break:break-all'><b><span lang=EN-US style='font-size:9.0pt;
+font-family:Consolas;color:green'>library</span></b><span lang=EN-US
+style='font-size:9.0pt;font-family:Consolas;color:#333333'>(rpart)</span></p>
+
+<p class=MsoNormal style='margin-bottom:7.5pt;line-height:15.0pt;background:
+whitesmoke;word-break:break-all'><b><span lang=EN-US style='font-size:9.0pt;
+font-family:Consolas;color:green'>library</span></b><span lang=EN-US
+style='font-size:9.0pt;font-family:Consolas;color:#333333'>(rpart.plot)</span></p>
+
+<p class=MsoNormal style='margin-bottom:7.5pt;line-height:15.0pt;background:
+whitesmoke;word-break:break-all'><span lang=FR style='font-size:9.0pt;
+font-family:Consolas;color:#333333'>data(ptitanic)</span></p>
+
+<p class=MsoNormal style='margin-bottom:7.5pt;line-height:normal'><span
+lang=FR style='font-size:10.5pt;font-family:"Helvetica",sans-serif;color:#333333'>Les
+données décrivent 1046 passagers selon 6 variables :</span></p>
+
+<p class=MsoNormal style='margin-left:46.35pt;text-indent:-18.0pt;line-height:
+15.0pt'><span lang=FR style='font-size:10.0pt;font-family:Symbol;color:#333333'>·<span
+style='font:7.0pt "Times New Roman"'>&nbsp; </span></span><span lang=FR
+style='font-size:9.0pt;font-family:Consolas;color:#DD1144;background:#F7F7F9'>pclass</span><span
+lang=FR style='font-size:10.5pt;font-family:"Helvetica",sans-serif;color:#333333'>&nbsp;donne
+la classe tarifaire sur le bateau ;</span></p>
+
+<p class=MsoNormal style='margin-left:46.35pt;text-indent:-18.0pt;line-height:
+15.0pt'><span lang=FR style='font-size:10.0pt;font-family:Symbol;color:#333333'>·<span
+style='font:7.0pt "Times New Roman"'>&nbsp; </span></span><span lang=FR
+style='font-size:9.0pt;font-family:Consolas;color:#DD1144;background:#F7F7F9'>survided</span><span
+lang=FR style='font-size:10.5pt;font-family:"Helvetica",sans-serif;color:#333333'>&nbsp;indique
+si le passager a survécu ;</span></p>
+
+<p class=MsoNormal style='margin-left:46.35pt;text-indent:-18.0pt;line-height:
+15.0pt'><span lang=FR style='font-size:10.0pt;font-family:Symbol;color:#333333'>·<span
+style='font:7.0pt "Times New Roman"'>&nbsp; </span></span><span lang=FR
+style='font-size:9.0pt;font-family:Consolas;color:#DD1144;background:#F7F7F9'>sex</span><span
+lang=FR style='font-size:10.5pt;font-family:"Helvetica",sans-serif;color:#333333'>&nbsp;donne
+le genre du passager ;</span></p>
+
+<p class=MsoNormal style='margin-left:46.35pt;text-indent:-18.0pt;line-height:
+15.0pt'><span lang=FR style='font-size:10.0pt;font-family:Symbol;color:#333333'>·<span
+style='font:7.0pt "Times New Roman"'>&nbsp; </span></span><span lang=FR
+style='font-size:9.0pt;font-family:Consolas;color:#DD1144;background:#F7F7F9'>age</span><span
+lang=FR style='font-size:10.5pt;font-family:"Helvetica",sans-serif;color:#333333'>&nbsp;donne
+l'âge du passager exprimé en années ;</span></p>
+
+<p class=MsoNormal style='margin-left:46.35pt;text-indent:-18.0pt;line-height:
+15.0pt'><span lang=FR style='font-size:10.0pt;font-family:Symbol;color:#333333'>·<span
+style='font:7.0pt "Times New Roman"'>&nbsp; </span></span><span lang=FR
+style='font-size:9.0pt;font-family:Consolas;color:#DD1144;background:#F7F7F9'>sibsp</span><span
+lang=FR style='font-size:10.5pt;font-family:"Helvetica",sans-serif;color:#333333'>&nbsp;donne
+le nombre de frères, sœurs, mari ou épouse à bord ;</span></p>
+
+<p class=MsoNormal style='margin-left:46.35pt;text-indent:-18.0pt;line-height:
+15.0pt'><span lang=FR style='font-size:10.0pt;font-family:Symbol;color:#333333'>·<span
+style='font:7.0pt "Times New Roman"'>&nbsp; </span></span><span lang=FR
+style='font-size:9.0pt;font-family:Consolas;color:#DD1144;background:#F7F7F9'>parch</span><span
+lang=FR style='font-size:10.5pt;font-family:"Helvetica",sans-serif;color:#333333'>&nbsp;donne
+le nombre d'enfants ou de parents à bord.</span></p>
+
+<p class=MsoNormal style='margin-bottom:7.5pt;line-height:normal'><span
+lang=FR style='font-size:10.5pt;font-family:"Helvetica",sans-serif;color:#333333'>Les
+trois dernières variables sont numériques alors que les trois premières sont
+nominales. Il faut bien s'assurer que la représentation en R des variables
+respecte leur nature. Pour ce faire, on utilise :</span></p>
+
+<p class=MsoNormal style='margin-bottom:7.5pt;line-height:15.0pt;background:
+whitesmoke;word-break:break-all'><b><span lang=FR style='font-size:9.0pt;
+font-family:Consolas;color:#003080'>lapply</span></b><span lang=FR
+style='font-size:9.0pt;font-family:Consolas;color:#333333'>(ptitanic,</span><b><span
+lang=FR style='font-size:9.0pt;font-family:Consolas;color:#003080'>class</span></b><span
+lang=FR style='font-size:9.0pt;font-family:Consolas;color:#333333'>)</span></p>
+
+<p class=MsoNormal style='margin-bottom:7.5pt;line-height:normal'><span
+lang=FR style='font-size:10.5pt;font-family:"Helvetica",sans-serif;color:#333333'>qui
+donne la classe de chaque variable, soit ici:</span></p>
+
+<p class=MsoNormal style='margin-bottom:7.5pt;line-height:15.0pt;background:
+whitesmoke;word-break:break-all'><span lang=EN-US style='font-size:10.0pt;
+font-family:Consolas;color:#333333'>$pclass</span></p>
+
+<p class=MsoNormal style='margin-bottom:7.5pt;line-height:15.0pt;background:
+whitesmoke;word-break:break-all'><span lang=EN-US style='font-size:10.0pt;
+font-family:Consolas;color:#333333'>[1] &quot;factor&quot;</span></p>
+
+<p class=MsoNormal style='margin-bottom:7.5pt;line-height:15.0pt;background:
+whitesmoke;word-break:break-all'><span lang=EN-US style='font-size:10.0pt;
+font-family:Consolas;color:#333333'>$survived</span></p>
+
+<p class=MsoNormal style='margin-bottom:7.5pt;line-height:15.0pt;background:
+whitesmoke;word-break:break-all'><span lang=EN-US style='font-size:10.0pt;
+font-family:Consolas;color:#333333'>[1] &quot;factor&quot;</span></p>
+
+<p class=MsoNormal style='margin-bottom:7.5pt;line-height:15.0pt;background:
+whitesmoke;word-break:break-all'><span lang=EN-US style='font-size:10.0pt;
+font-family:Consolas;color:#333333'>$sex</span></p>
+
+<p class=MsoNormal style='margin-bottom:7.5pt;line-height:15.0pt;background:
+whitesmoke;word-break:break-all'><span lang=EN-US style='font-size:10.0pt;
+font-family:Consolas;color:#333333'>[1] &quot;factor&quot;</span></p>
+
+<p class=MsoNormal style='margin-bottom:7.5pt;line-height:15.0pt;background:
+whitesmoke;word-break:break-all'><span lang=EN-US style='font-size:10.0pt;
+font-family:Consolas;color:#333333'>$age</span></p>
+
+<p class=MsoNormal style='margin-bottom:7.5pt;line-height:15.0pt;background:
+whitesmoke;word-break:break-all'><span lang=EN-US style='font-size:10.0pt;
+font-family:Consolas;color:#333333'>[1] &quot;labelled&quot;</span></p>
+
+<p class=MsoNormal style='margin-bottom:7.5pt;line-height:15.0pt;background:
+whitesmoke;word-break:break-all'><span lang=EN-US style='font-size:10.0pt;
+font-family:Consolas;color:#333333'>&nbsp;</span></p>
+
+<p class=MsoNormal style='margin-bottom:7.5pt;line-height:15.0pt;background:
+whitesmoke;word-break:break-all'><span lang=EN-US style='font-size:10.0pt;
+font-family:Consolas;color:#333333'>$sibsp</span></p>
+
+<p class=MsoNormal style='margin-bottom:7.5pt;line-height:15.0pt;background:
+whitesmoke;word-break:break-all'><span lang=EN-US style='font-size:10.0pt;
+font-family:Consolas;color:#333333'>[1] &quot;labelled&quot;</span></p>
+
+<p class=MsoNormal style='margin-bottom:7.5pt;line-height:15.0pt;background:
+whitesmoke;word-break:break-all'><span lang=EN-US style='font-size:10.0pt;
+font-family:Consolas;color:#333333'>$parch</span></p>
+
+<p class=MsoNormal style='margin-bottom:7.5pt;line-height:15.0pt;background:
+whitesmoke;word-break:break-all'><span lang=EN-US style='font-size:10.0pt;
+font-family:Consolas;color:#333333'>[1] &quot;labelled&quot;</span></p>
+
+<p class=MsoNormal style='margin-bottom:7.5pt;line-height:normal'><span
+lang=FR style='font-size:10.5pt;font-family:"Helvetica",sans-serif;color:#333333'>Les
+trois variables nominales sont donc bien des&nbsp;</span><span lang=FR
+style='font-size:9.0pt;font-family:Consolas;color:#DD1144;background:#F7F7F9'>factor</span><span
+lang=FR style='font-size:10.5pt;font-family:"Helvetica",sans-serif;color:#333333'>.
+Pour les valeurs numériques, on obtient la classe&nbsp;</span><span lang=FR
+style='font-size:9.0pt;font-family:Consolas;color:#DD1144;background:#F7F7F9'>labelled</span><span
+lang=FR style='font-size:10.5pt;font-family:"Helvetica",sans-serif;color:#333333'>&nbsp;qui
+est spécifique au package&nbsp;<a
+href="http://cran.r-project.org/web/packages/Hmisc/index.html"><span
+style='color:#0088CC'>Hmisc</span></a>. On peut vérifier en supprimant cette
+classe que les variables correspondantes sont bien numériques, comme dans le
+code suivant :</span></p>
+
+<p class=MsoNormal style='margin-bottom:7.5pt;line-height:15.0pt;background:
+whitesmoke;word-break:break-all'><b><span lang=EN-US style='font-size:9.0pt;
+font-family:Consolas;color:#003080'>attr</span></b><span lang=EN-US
+style='font-size:9.0pt;font-family:Consolas;color:#333333'>(ptitanic</span><span
+lang=EN-US style='font-size:9.0pt;font-family:Consolas;color:#303030'>$</span><span
+lang=EN-US style='font-size:9.0pt;font-family:Consolas;color:#333333'>age,<span
+style='background:#FFF0F0'>&quot;class&quot;</span>) </span><span lang=EN-US
+style='font-size:9.0pt;font-family:Consolas;color:#303030'>&lt;-</span><span
+lang=EN-US style='font-size:9.0pt;font-family:Consolas;color:#333333'> </span><b><span
+lang=EN-US style='font-size:9.0pt;font-family:Consolas;color:green'>NULL</span></b></p>
+
+<p class=MsoNormal style='margin-bottom:7.5pt;line-height:15.0pt;background:
+whitesmoke;word-break:break-all'><b><span lang=EN-US style='font-size:9.0pt;
+font-family:Consolas;color:#003080'>class</span></b><span lang=EN-US
+style='font-size:9.0pt;font-family:Consolas;color:#333333'>(ptitanic</span><span
+lang=EN-US style='font-size:9.0pt;font-family:Consolas;color:#303030'>$</span><span
+lang=EN-US style='font-size:9.0pt;font-family:Consolas;color:#333333'>age)</span></p>
+
+<p class=MsoNormal style='margin-bottom:7.5pt;line-height:normal'><span
+lang=FR style='font-size:10.5pt;font-family:"Helvetica",sans-serif;color:#333333'>qui
+affiche bien</span></p>
+
+<p class=MsoNormal style='margin-bottom:7.5pt;line-height:15.0pt;background:
+whitesmoke;word-break:break-all'><span lang=FR style='font-size:10.0pt;
+font-family:Consolas;color:#333333'>[1] &quot;numeric&quot;</span></p>
+
+<p class=MsoNormal style='margin-bottom:7.5pt;line-height:normal'><span
+lang=FR style='font-size:10.5pt;font-family:"Helvetica",sans-serif;color:#333333'>comme
+attendu.</span></p>
+
+<p class=MsoNormal style='margin-top:7.5pt;margin-right:0cm;margin-bottom:7.5pt;
+margin-left:0cm;line-height:30.0pt'><b><span lang=FR style='font-size:18.0pt;
+font-family:"inherit",serif;color:#333333'>Construction de l'arbre complet</span></b></p>
+
+<p class=MsoNormal style='margin-bottom:7.5pt;line-height:normal'><span
+lang=FR style='font-size:10.5pt;font-family:"Helvetica",sans-serif;color:#333333'>La
+fonction de construction d'un arbre s'appelle&nbsp;</span><span lang=FR
+style='font-size:9.0pt;font-family:Consolas;color:#DD1144;background:#F7F7F9'>rpart</span><span
+lang=FR style='font-size:10.5pt;font-family:"Helvetica",sans-serif;color:#333333'>,
+comme le package. On l'utilise en général avec l'interface des&nbsp;</span><span
+lang=FR><a
+href="http://cran.r-project.org/doc/manuals/r-release/R-intro.html#Formulae-for-statistical-models"><span
+style='font-size:10.5pt;font-family:"Helvetica",sans-serif;color:#0088CC'>formules</span></a></span><span
+lang=FR style='font-size:10.5pt;font-family:"Helvetica",sans-serif;color:#333333'>&nbsp;de
+R, comme ci-dessous :</span></p>
+
+<p class=MsoNormal style='margin-bottom:7.5pt;line-height:15.0pt;background:
+whitesmoke;word-break:break-all'><span lang=EN-US style='font-size:9.0pt;
+font-family:Consolas;color:#333333'>ptitanicTree </span><span lang=EN-US
+style='font-size:9.0pt;font-family:Consolas;color:#303030'>&lt;-</span><span
+lang=EN-US style='font-size:9.0pt;font-family:Consolas;color:#333333'>
+rpart(survived</span><span lang=EN-US style='font-size:9.0pt;font-family:Consolas;
+color:#303030'>~</span><b><span lang=EN-US style='font-size:9.0pt;font-family:
+Consolas;color:#6000E0'>.</span></b><span lang=EN-US style='font-size:9.0pt;
+font-family:Consolas;color:#333333'>,data</span><span lang=EN-US
+style='font-size:9.0pt;font-family:Consolas;color:#303030'>=</span><span
+lang=EN-US style='font-size:9.0pt;font-family:Consolas;color:#333333'>ptitanic)</span></p>
+
+<p class=MsoNormal style='margin-bottom:7.5pt;line-height:normal'><span
+lang=FR style='font-size:10.5pt;font-family:"Helvetica",sans-serif;color:#333333'>La
+formule utilisée&nbsp;</span><span lang=FR style='font-size:9.0pt;font-family:
+Consolas;color:#DD1144;background:#F7F7F9'>survived~.</span><span lang=FR
+style='font-size:10.5pt;font-family:"Helvetica",sans-serif;color:#333333'>&nbsp;indique
+qu'on souhaite prédire la variable&nbsp;</span><span lang=FR style='font-size:
+9.0pt;font-family:Consolas;color:#DD1144;background:#F7F7F9'>survived</span><span
+lang=FR style='font-size:10.5pt;font-family:"Helvetica",sans-serif;color:#333333'>&nbsp;en
+fonction de toutes les autres. Le principe général est que la (ou les) variable(s)
+à prédire sont à gauche du symbole&nbsp;</span><span lang=FR style='font-size:
+9.0pt;font-family:Consolas;color:#DD1144;background:#F7F7F9'>~</span><span
+lang=FR style='font-size:10.5pt;font-family:"Helvetica",sans-serif;color:#333333'>&nbsp;alors
+que les variables prédictives sont à droite du symbole. Ici, le point&nbsp;</span><span
+lang=FR style='font-size:9.0pt;font-family:Consolas;color:#DD1144;background:
+#F7F7F9'>.</span><span lang=FR style='font-size:10.5pt;font-family:"Helvetica",sans-serif;
+color:#333333'>&nbsp;permet d'indiquer qu'on souhaite utiliser toutes les
+variables des données comme prédicteurs sauf les variables à prédire (ce qui
+évite d'avoir à écrire la liste des prédicteurs).</span></p>
+
+<p class=MsoNormal style='margin-bottom:7.5pt;line-height:normal'><span
+lang=FR style='font-size:10.5pt;font-family:"Helvetica",sans-serif;color:#333333'>On
+a utilisé ici les paramètres par défaut de la fonction&nbsp;</span><span
+lang=FR style='font-size:9.0pt;font-family:Consolas;color:#DD1144;background:
+#F7F7F9'>rpart</span><span lang=FR style='font-size:10.5pt;font-family:"Helvetica",sans-serif;
+color:#333333'>, ce qui ne conduit pas toujours à la solution désirée. En
+effet,&nbsp;</span><span lang=FR style='font-size:9.0pt;font-family:Consolas;
+color:#DD1144;background:#F7F7F9'>rpart</span><span lang=FR style='font-size:
+10.5pt;font-family:"Helvetica",sans-serif;color:#333333'>&nbsp;ne construit en
+général pas l'arbre le plus complet possible, pour des raisons d'efficacité. Il
+est rare en pratique qu'un arbre très profond qui ne réalise aucune erreur de
+classement sur les données d'apprentissage soit le plus adapté. Il sur-apprend
+massivement, en général. Il n'est donc pas très utile de construire un tel arbre,
+puisqu'on devra en pratique l'élaguer.</span></p>
+
+<p class=MsoNormal style='margin-bottom:7.5pt;line-height:normal'><span
+lang=FR style='font-size:10.5pt;font-family:"Helvetica",sans-serif;color:#333333'>Cependant,
+il arrive sur des données de petite taille que les paramètres par défaut
+de&nbsp;</span><span lang=FR style='font-size:9.0pt;font-family:Consolas;
+color:#DD1144;background:#F7F7F9'>rpart</span><span lang=FR style='font-size:
+10.5pt;font-family:"Helvetica",sans-serif;color:#333333'>&nbsp;soient trop
+conservateurs. Par exemple,&nbsp;</span><span lang=FR style='font-size:9.0pt;
+font-family:Consolas;color:#DD1144;background:#F7F7F9'>rpart</span><span
+lang=FR style='font-size:10.5pt;font-family:"Helvetica",sans-serif;color:#333333'>&nbsp;ne
+découpe pas une feuille contenant 20 observations. De même&nbsp;</span><span
+lang=FR style='font-size:9.0pt;font-family:Consolas;color:#DD1144;background:
+#F7F7F9'>rpart</span><span lang=FR style='font-size:10.5pt;font-family:"Helvetica",sans-serif;
+color:#333333'>&nbsp;demande une amélioration relative d'au moins 1 % de la
+qualité d'une partition pour effectuer un découpage. Pour changer ces valeurs,
+il suffit d'utiliser la commande&nbsp;</span><span lang=FR style='font-size:
+9.0pt;font-family:Consolas;color:#DD1144;background:#F7F7F9'>rpart.control</span><span
+lang=FR style='font-size:10.5pt;font-family:"Helvetica",sans-serif;color:#333333'>&nbsp;en
+précisant les éléments à modifier. Le code suivant</span></p>
+
+<p class=MsoNormal style='margin-bottom:7.5pt;line-height:15.0pt;background:
+whitesmoke;word-break:break-all'><span lang=FR style='font-size:9.0pt;
+font-family:Consolas;color:#333333'>ptitanicTree </span><span lang=FR
+style='font-size:9.0pt;font-family:Consolas;color:#303030'>&lt;-</span><span
+lang=FR style='font-size:9.0pt;font-family:Consolas;color:#333333'> rpart(survived</span><span
+lang=FR style='font-size:9.0pt;font-family:Consolas;color:#303030'>~</span><b><span
+lang=FR style='font-size:9.0pt;font-family:Consolas;color:#6000E0'>.</span></b><span
+lang=FR style='font-size:9.0pt;font-family:Consolas;color:#333333'>,data</span><span
+lang=FR style='font-size:9.0pt;font-family:Consolas;color:#303030'>=</span><span
+lang=FR style='font-size:9.0pt;font-family:Consolas;color:#333333'>ptitanic,control</span><span
+lang=FR style='font-size:9.0pt;font-family:Consolas;color:#303030'>=</span><span
+lang=FR style='font-size:9.0pt;font-family:Consolas;color:#333333'>rpart.control(minsplit</span><span
+lang=FR style='font-size:9.0pt;font-family:Consolas;color:#303030'>=</span><b><span
+lang=FR style='font-size:9.0pt;font-family:Consolas;color:#6000E0'>5</span></b><span
+lang=FR style='font-size:9.0pt;font-family:Consolas;color:#333333'>,cp</span><span
+lang=FR style='font-size:9.0pt;font-family:Consolas;color:#303030'>=</span><b><span
+lang=FR style='font-size:9.0pt;font-family:Consolas;color:#6000E0'>0</span></b><span
+lang=FR style='font-size:9.0pt;font-family:Consolas;color:#333333'>))</span></p>
+
+<p class=MsoNormal style='margin-bottom:7.5pt;line-height:normal'><span
+lang=FR style='font-size:10.5pt;font-family:"Helvetica",sans-serif;color:#333333'>construit
+un arbre en continuant les découpages dans les feuilles qui contiennent au
+moins 5 observations (paramètre&nbsp;</span><span lang=FR style='font-size:
+9.0pt;font-family:Consolas;color:#DD1144;background:#F7F7F9'>minsplit</span><span
+lang=FR style='font-size:10.5pt;font-family:"Helvetica",sans-serif;color:#333333'>)
+et sans contrainte sur la qualité du découpage (paramètre&nbsp;</span><span
+lang=FR style='font-size:9.0pt;font-family:Consolas;color:#DD1144;background:
+#F7F7F9'>cp</span><span lang=FR style='font-size:10.5pt;font-family:"Helvetica",sans-serif;
+color:#333333'>&nbsp;mis à 0). L'arbre construit de cette façon est assez
+volumineux et contient 65 feuilles.</span></p>
+
+<p class=MsoNormal style='margin-top:7.5pt;margin-right:0cm;margin-bottom:7.5pt;
+margin-left:0cm;line-height:30.0pt'><b><span lang=FR style='font-size:22.5pt;
+font-family:"inherit",serif;color:#333333'>Simplification de l'arbre</span></b></p>
+
+<p class=MsoNormal style='margin-top:7.5pt;margin-right:0cm;margin-bottom:7.5pt;
+margin-left:0cm;line-height:30.0pt'><b><span lang=FR style='font-size:18.0pt;
+font-family:"inherit",serif;color:#333333'>Niveaux de simplification</span></b></p>
+
+<p class=MsoNormal style='margin-bottom:7.5pt;line-height:normal'><span
+lang=FR style='font-size:10.5pt;font-family:"Helvetica",sans-serif;color:#333333'>Pour
+choisir le bon niveau de simplification, ou encore le bon nombre de feuilles,
+on procède par validation croisée. La fonction&nbsp;</span><span lang=FR
+style='font-size:9.0pt;font-family:Consolas;color:#DD1144;background:#F7F7F9'>rpart</span><span
+lang=FR style='font-size:10.5pt;font-family:"Helvetica",sans-serif;color:#333333'>&nbsp;réalise
+par défaut une estimation des performances de l'arbre par validation croisée à
+10 blocs pour chaque niveau de simplification pertinent. Le nombre de blocs se
+règle au moment de la construction de l'arbre grâce au paramètre&nbsp;</span><span
+lang=FR style='font-size:9.0pt;font-family:Consolas;color:#DD1144;background:
+#F7F7F9'>xval</span><span lang=FR style='font-size:10.5pt;font-family:"Helvetica",sans-serif;
+color:#333333'>&nbsp;de&nbsp;</span><span lang=FR style='font-size:9.0pt;
+font-family:Consolas;color:#DD1144;background:#F7F7F9'>rpart.control</span><span
+lang=FR style='font-size:10.5pt;font-family:"Helvetica",sans-serif;color:#333333'>.</span></p>
+
+<p class=MsoNormal style='margin-bottom:7.5pt;line-height:normal'><span
+lang=FR style='font-size:10.5pt;font-family:"Helvetica",sans-serif;color:#333333'>On
+peut afficher les résultats de cette opération grâce à la fonction&nbsp;</span><span
+lang=FR style='font-size:9.0pt;font-family:Consolas;color:#DD1144;background:
+#F7F7F9'>printcp</span><span lang=FR style='font-size:10.5pt;font-family:"Helvetica",sans-serif;
+color:#333333'>, comme ci-dessous. La courbe indique le taux de mauvaises
+classifications relativement au score d'origine (dans un arbre réduit à une
+seule feuille dans laquelle la décision correspond à la classe majoritaire),
+estimé par la validation croisée. Les barres d'erreur autour de chaque
+estimation sont aussi obtenues par validation croisée. Ici, comme on a 809
+morts et 500 survivants, l'erreur de référence est d'environ 38,2 %. L'axe des
+abscisses indique la complexité de l'arbre par l'intermédiaire du nombre de
+feuilles.</span></p>
+
+<p class=MsoNormal style='margin-bottom:7.5pt;line-height:15.0pt;background:
+whitesmoke;word-break:break-all'><span lang=FR style='font-size:9.0pt;
+font-family:Consolas;color:#333333'>plotcp(ptitanicTree)</span></p>
+
+<p class=MsoNormal style='margin-bottom:15.0pt;line-height:15.0pt'><span
+lang=FR style='font-size:10.5pt;font-family:"Helvetica",sans-serif;color:#333333'><img
+border=0 width=529 height=337 id="Image 4"
+src="Initiation%20à%20rpart-Dateien/image001.jpg"
+alt="Une image contenant capture d’écran&#10;&#10;Description générée automatiquement"></span></p>
+
+<p class=MsoNormal style='margin-bottom:7.5pt;line-height:15.0pt'><span
+lang=FR style='font-size:9.0pt;font-family:"Helvetica",sans-serif;color:#333333'>Performances
+par validation croisée</span></p>
+
+<p class=MsoNormal style='margin-bottom:7.5pt;line-height:15.0pt'><span
+lang=FR style='font-size:10.5pt;font-family:"Helvetica",sans-serif;color:#333333'>&nbsp;</span></p>
+
+<p class=MsoNormal style='margin-top:7.5pt;margin-right:0cm;margin-bottom:7.5pt;
+margin-left:0cm;line-height:30.0pt'><b><span lang=FR style='font-size:18.0pt;
+font-family:"inherit",serif;color:#333333'>Simplification</span></b></p>
+
+<p class=MsoNormal style='margin-bottom:7.5pt;line-height:normal'><span
+lang=FR style='font-size:10.5pt;font-family:"Helvetica",sans-serif;color:#333333'>Comme
+attendu, les performances s'améliorent dans un premier temps quand on augmente
+le nombre de feuilles puis se dégradent en raison du sur-apprentissage. On
+choisit en général la complexité qui minimise l'erreur estimée, soit ici 11
+feuilles. Pour obtenir l'arbre simplifié, on utilise la fonction&nbsp;</span><span
+lang=FR style='font-size:9.0pt;font-family:Consolas;color:#DD1144;background:
+#F7F7F9'>prune</span><span lang=FR style='font-size:10.5pt;font-family:"Helvetica",sans-serif;
+color:#333333'>, comme dans le code suivant :</span></p>
+
+<p class=MsoNormal style='margin-bottom:7.5pt;line-height:15.0pt;background:
+whitesmoke;word-break:break-all'><span lang=FR style='font-size:9.0pt;
+font-family:Consolas;color:#333333'>ptitanicSimple </span><span lang=FR
+style='font-size:9.0pt;font-family:Consolas;color:#303030'>&lt;-</span><span
+lang=FR style='font-size:9.0pt;font-family:Consolas;color:#333333'>
+prune(ptitanicTree,cp</span><span lang=FR style='font-size:9.0pt;font-family:
+Consolas;color:#303030'>=</span><b><span lang=FR style='font-size:9.0pt;
+font-family:Consolas;color:#6000E0'>0.0047</span></b><span lang=FR
+style='font-size:9.0pt;font-family:Consolas;color:#333333'>)</span></p>
+
+<p class=MsoNormal style='margin-bottom:7.5pt;line-height:normal'><span
+lang=FR style='font-size:10.5pt;font-family:"Helvetica",sans-serif;color:#333333'>On
+utilise ici le&nbsp;</span><span lang=FR style='font-size:9.0pt;font-family:
+Consolas;color:#DD1144;background:#F7F7F9'>cp</span><span lang=FR
+style='font-size:10.5pt;font-family:"Helvetica",sans-serif;color:#333333'>&nbsp;affiché
+sur la courbe, ce qui n'est pas très pratique. Pour automatiser le processus,
+on peut s'appuyer sur l'attribut&nbsp;</span><span lang=FR style='font-size:
+9.0pt;font-family:Consolas;color:#DD1144;background:#F7F7F9'>cptable</span><span
+lang=FR style='font-size:10.5pt;font-family:"Helvetica",sans-serif;color:#333333'>&nbsp;des
+objets arbres. Cette matrice contient toutes les informations utilisées pour
+produire le graphique ci-dessus. En pratique, on peut retrouver l'arbre optimal
+en faisant :</span></p>
+
+<p class=MsoNormal style='margin-bottom:7.5pt;line-height:15.0pt;background:
+whitesmoke;word-break:break-all'><span lang=FR style='font-size:9.0pt;
+font-family:Consolas;color:#333333'>ptitanicOptimal </span><span lang=FR
+style='font-size:9.0pt;font-family:Consolas;color:#303030'>&lt;-</span><span
+lang=FR style='font-size:9.0pt;font-family:Consolas;color:#333333'>
+prune(ptitanicTree,cp</span><span lang=FR style='font-size:9.0pt;font-family:
+Consolas;color:#303030'>=</span><span lang=FR style='font-size:9.0pt;
+font-family:Consolas;color:#333333'>ptitanicTree</span><span lang=FR
+style='font-size:9.0pt;font-family:Consolas;color:#303030'>$</span><span
+lang=FR style='font-size:9.0pt;font-family:Consolas;color:#333333'>cptable[</span><b><span
+lang=FR style='font-size:9.0pt;font-family:Consolas;color:#003080'>which.min</span></b><span
+lang=FR style='font-size:9.0pt;font-family:Consolas;color:#333333'>(ptitanicTree</span><span
+lang=FR style='font-size:9.0pt;font-family:Consolas;color:#303030'>$</span><span
+lang=FR style='font-size:9.0pt;font-family:Consolas;color:#333333'>cptable[,</span><b><span
+lang=FR style='font-size:9.0pt;font-family:Consolas;color:#6000E0'>4</span></b><span
+lang=FR style='font-size:9.0pt;font-family:Consolas;color:#333333'>]),</span><b><span
+lang=FR style='font-size:9.0pt;font-family:Consolas;color:#6000E0'>1</span></b><span
+lang=FR style='font-size:9.0pt;font-family:Consolas;color:#333333'>])</span></p>
+
+<p class=MsoNormal style='margin-bottom:7.5pt;line-height:normal'><span
+lang=FR style='font-size:10.5pt;font-family:"Helvetica",sans-serif;color:#333333'>Notons
+que la valeur de&nbsp;</span><span lang=FR style='font-size:9.0pt;font-family:
+Consolas;color:#DD1144;background:#F7F7F9'>cp</span><span lang=FR
+style='font-size:10.5pt;font-family:"Helvetica",sans-serif;color:#333333'>&nbsp;obtenue
+de cette façon n'est pas la même que celle affichée sur la figure : les valeurs
+contenues dans la matrice&nbsp;</span><span lang=FR style='font-size:9.0pt;
+font-family:Consolas;color:#DD1144;background:#F7F7F9'>cptable</span><span
+lang=FR style='font-size:10.5pt;font-family:"Helvetica",sans-serif;color:#333333'>&nbsp;sont
+celles qui produisent des changements dans le nombre de feuilles de l'arbre.
+Pour des raisons de stabilité, on préfère parfois utiliser les moyennes
+géométriques de deux nombres qui se suivent, ce qui explique la valeur de&nbsp;</span><span
+lang=FR style='font-size:9.0pt;font-family:Consolas;color:#DD1144;background:
+#F7F7F9'>0.0047</span><span lang=FR style='font-size:10.5pt;font-family:"Helvetica",sans-serif;
+color:#333333'>&nbsp;sur le graphique contre&nbsp;</span><span lang=FR
+style='font-size:9.0pt;font-family:Consolas;color:#DD1144;background:#F7F7F9'>0.0028</span><span
+lang=FR style='font-size:10.5pt;font-family:"Helvetica",sans-serif;color:#333333'>&nbsp;par
+la table. Dans notre contexte, ceci n'est pas très important.</span></p>
+
+<p class=MsoNormal style='margin-top:7.5pt;margin-right:0cm;margin-bottom:7.5pt;
+margin-left:0cm;line-height:30.0pt'><b><span lang=FR style='font-size:18.0pt;
+font-family:"inherit",serif;color:#333333'>Représentation graphique</span></b></p>
+
+<p class=MsoNormal style='margin-bottom:7.5pt;line-height:normal'><span
+lang=FR style='font-size:10.5pt;font-family:"Helvetica",sans-serif;color:#333333'>Le
+package&nbsp;</span><span lang=FR style='font-size:9.0pt;font-family:Consolas;
+color:#DD1144;background:#F7F7F9'>rpart</span><span lang=FR style='font-size:
+10.5pt;font-family:"Helvetica",sans-serif;color:#333333'>&nbsp;propose des
+fonctions d'affichage relativement limitées. On préfère donc s'appuyer
+sur&nbsp;</span><span lang=FR style='font-size:9.0pt;font-family:Consolas;
+color:#DD1144;background:#F7F7F9'>rpart.plot</span><span lang=FR
+style='font-size:10.5pt;font-family:"Helvetica",sans-serif;color:#333333'>, en
+particulier sur sa fonction&nbsp;</span><span lang=FR style='font-size:9.0pt;
+font-family:Consolas;color:#DD1144;background:#F7F7F9'>prp</span><span lang=FR
+style='font-size:10.5pt;font-family:"Helvetica",sans-serif;color:#333333'>. La
+figure ci-dessous est obtenue par le simple appel suivant :</span></p>
+
+<p class=MsoNormal style='margin-bottom:7.5pt;line-height:15.0pt;background:
+whitesmoke;word-break:break-all'><span lang=FR style='font-size:9.0pt;
+font-family:Consolas;color:#333333'>prp(ptitanicOptimal,extra</span><span
+lang=FR style='font-size:9.0pt;font-family:Consolas;color:#303030'>=</span><b><span
+lang=FR style='font-size:9.0pt;font-family:Consolas;color:#6000E0'>1</span></b><span
+lang=FR style='font-size:9.0pt;font-family:Consolas;color:#333333'>)</span></p>
+
+<p class=MsoNormal style='margin-bottom:15.0pt;margin-left:27.6pt;line-height:
+15.0pt'><span lang=FR style='font-size:10.5pt;font-family:"Helvetica",sans-serif;
+color:#333333'><img border=0 width=358 height=220 id="Image 1"
+src="Initiation%20à%20rpart-Dateien/image002.jpg"
+alt="Une image contenant texte, carte&#10;&#10;Description générée automatiquement"></span></p>
+
+<p class=MsoNormal style='margin-bottom:7.5pt;line-height:15.0pt'><span
+lang=FR style='font-size:9.0pt;font-family:"Helvetica",sans-serif;color:#333333'>Arbre
+simplifié : chaque nœud représente une question, la réponse non étant toujours
+dans la branche droite de l'arbre. Chaque feuille est étiquetée par la décision
+associée (ici died ou survived) et par l'effectif classe par classe des
+individus affectés à la feuille. Par exemple, la feuille la plus à gauche classe
+les individus en died, avec 660 individus de cette classe et 136 de la classe
+survived.</span></p>
+
+<p class=MsoNormal style='margin-top:7.5pt;margin-right:0cm;margin-bottom:7.5pt;
+margin-left:0cm;line-height:30.0pt'><b><span lang=FR style='font-size:22.5pt;
+font-family:"inherit",serif;color:#333333'>&nbsp;</span></b></p>
+
+<p class=MsoNormal style='margin-top:7.5pt;margin-right:0cm;margin-bottom:7.5pt;
+margin-left:0cm;line-height:30.0pt'><b><span lang=FR style='font-size:22.5pt;
+font-family:"inherit",serif;color:#333333'>&nbsp;</span></b></p>
+
+<p class=MsoNormal style='margin-top:7.5pt;margin-right:0cm;margin-bottom:7.5pt;
+margin-left:0cm;line-height:30.0pt'><b><span lang=FR style='font-size:22.5pt;
+font-family:"inherit",serif;color:#333333'>&nbsp;</span></b></p>
+
+<p class=MsoNormal style='margin-top:7.5pt;margin-right:0cm;margin-bottom:7.5pt;
+margin-left:0cm;line-height:30.0pt'><b><span lang=FR style='font-size:22.5pt;
+font-family:"inherit",serif;color:#333333'>Utilisation de l'arbre</span></b></p>
+
+<p class=MsoNormal style='margin-top:7.5pt;margin-right:0cm;margin-bottom:7.5pt;
+margin-left:0cm;line-height:30.0pt'><b><span lang=FR style='font-size:18.0pt;
+font-family:"inherit",serif;color:#333333'>Prévision</span></b></p>
+
+<p class=MsoNormal style='margin-bottom:7.5pt;line-height:normal'><span
+lang=FR style='font-size:10.5pt;font-family:"Helvetica",sans-serif;color:#333333'>Comme
+tout modèle R, un arbre obtenu par&nbsp;</span><span lang=FR style='font-size:
+9.0pt;font-family:Consolas;color:#DD1144;background:#F7F7F9'>rpart</span><span
+lang=FR style='font-size:10.5pt;font-family:"Helvetica",sans-serif;color:#333333'>&nbsp;(avec
+ou sans simplification) peut réaliser des prévisions sur de nouvelles données,
+en s'appuyant sur la fonction&nbsp;</span><span lang=FR style='font-size:9.0pt;
+font-family:Consolas;color:#DD1144;background:#F7F7F9'>predict</span><span
+lang=FR style='font-size:10.5pt;font-family:"Helvetica",sans-serif;color:#333333'>.
+Par défaut, la fonction estime les probabilités d'appartenance aux classes pour
+chaque observation (simplement par le ratio dans la feuille correspondante).
+Par exemple le code suivant</span></p>
+
+<p class=MsoNormal style='margin-bottom:7.5pt;line-height:15.0pt;background:
+whitesmoke;word-break:break-all'><span lang=FR style='font-size:9.0pt;
+font-family:Consolas;color:#333333'>predict(ptitanicOptimal,ptitanic[</span><b><span
+lang=FR style='font-size:9.0pt;font-family:Consolas;color:#6000E0'>1</span></b><span
+lang=FR style='font-size:9.0pt;font-family:Consolas;color:#303030'>:</span><b><span
+lang=FR style='font-size:9.0pt;font-family:Consolas;color:#6000E0'>10</span></b><span
+lang=FR style='font-size:9.0pt;font-family:Consolas;color:#333333'>,])</span></p>
+
+<p class=MsoNormal style='margin-bottom:7.5pt;line-height:normal'><span
+lang=FR style='font-size:10.5pt;font-family:"Helvetica",sans-serif;color:#333333'>donne
+les estimations suivantes sur les dix premiers passagers :</span></p>
+
+<p class=MsoNormal style='margin-bottom:7.5pt;line-height:15.0pt;background:
+whitesmoke;word-break:break-all'><span lang=FR style='font-size:10.0pt;
+font-family:Consolas;color:#333333'>        died  survived</span></p>
+
+<p class=MsoNormal style='margin-bottom:7.5pt;line-height:15.0pt;background:
+whitesmoke;word-break:break-all'><span lang=FR style='font-size:10.0pt;
+font-family:Consolas;color:#333333'>1  0.0680000 0.9320000</span></p>
+
+<p class=MsoNormal style='margin-bottom:7.5pt;line-height:15.0pt;background:
+whitesmoke;word-break:break-all'><span lang=FR style='font-size:10.0pt;
+font-family:Consolas;color:#333333'>2  0.1111111 0.8888889</span></p>
+
+<p class=MsoNormal style='margin-bottom:7.5pt;line-height:15.0pt;background:
+whitesmoke;word-break:break-all'><span lang=FR style='font-size:10.0pt;
+font-family:Consolas;color:#333333'>3  0.0680000 0.9320000</span></p>
+
+<p class=MsoNormal style='margin-bottom:7.5pt;line-height:15.0pt;background:
+whitesmoke;word-break:break-all'><span lang=FR style='font-size:10.0pt;
+font-family:Consolas;color:#333333'>4  0.8291457 0.1708543</span></p>
+
+<p class=MsoNormal style='margin-bottom:7.5pt;line-height:15.0pt;background:
+whitesmoke;word-break:break-all'><span lang=FR style='font-size:10.0pt;
+font-family:Consolas;color:#333333'>5  0.0680000 0.9320000</span></p>
+
+<p class=MsoNormal style='margin-bottom:7.5pt;line-height:15.0pt;background:
+whitesmoke;word-break:break-all'><span lang=FR style='font-size:10.0pt;
+font-family:Consolas;color:#333333'>6  0.8291457 0.1708543</span></p>
+
+<p class=MsoNormal style='margin-bottom:7.5pt;line-height:15.0pt;background:
+whitesmoke;word-break:break-all'><span lang=FR style='font-size:10.0pt;
+font-family:Consolas;color:#333333'>7  0.0680000 0.9320000</span></p>
+
+<p class=MsoNormal style='margin-bottom:7.5pt;line-height:15.0pt;background:
+whitesmoke;word-break:break-all'><span lang=FR style='font-size:10.0pt;
+font-family:Consolas;color:#333333'>8  0.8291457 0.1708543</span></p>
+
+<p class=MsoNormal style='margin-bottom:7.5pt;line-height:15.0pt;background:
+whitesmoke;word-break:break-all'><span lang=FR style='font-size:10.0pt;
+font-family:Consolas;color:#333333'>9  0.0680000 0.9320000</span></p>
+
+<p class=MsoNormal style='margin-bottom:7.5pt;line-height:15.0pt;background:
+whitesmoke;word-break:break-all'><span lang=FR style='font-size:10.0pt;
+font-family:Consolas;color:#333333'>10 0.8291457 0.1708543</span></p>
+
+<p class=MsoNormal style='margin-bottom:7.5pt;line-height:normal'><span
+lang=FR style='font-size:10.5pt;font-family:"Helvetica",sans-serif;color:#333333'>Pour
+obtenir la classe prédite, il suffit d'ajouter le paramètre&nbsp;</span><span
+lang=FR style='font-size:9.0pt;font-family:Consolas;color:#DD1144;background:
+#F7F7F9'>type</span><span lang=FR style='font-size:10.5pt;font-family:"Helvetica",sans-serif;
+color:#333333'>&nbsp;avec la bonne valeur, soit :</span></p>
+
+<p class=MsoNormal style='margin-bottom:7.5pt;line-height:15.0pt;background:
+whitesmoke;word-break:break-all'><span lang=EN-US style='font-size:9.0pt;
+font-family:Consolas;color:#333333'>predict(ptitanicOptimal, ptitanic[</span><b><span
+lang=EN-US style='font-size:9.0pt;font-family:Consolas;color:#6000E0'>1</span></b><span
+lang=EN-US style='font-size:9.0pt;font-family:Consolas;color:#303030'>:</span><b><span
+lang=EN-US style='font-size:9.0pt;font-family:Consolas;color:#6000E0'>10</span></b><span
+lang=EN-US style='font-size:9.0pt;font-family:Consolas;color:#333333'>,], type</span><span
+lang=EN-US style='font-size:9.0pt;font-family:Consolas;color:#303030'>=</span><span
+lang=EN-US style='font-size:9.0pt;font-family:Consolas;color:#333333;
+background:#FFF0F0'>&quot;class&quot;</span><span lang=EN-US style='font-size:
+9.0pt;font-family:Consolas;color:#333333'>)</span></p>
+
+<p class=MsoNormal style='margin-bottom:7.5pt;line-height:normal'><span
+lang=EN-US style='font-size:10.5pt;font-family:"Helvetica",sans-serif;
+color:#333333'>ce qui donne :</span></p>
+
+<p class=MsoNormal style='margin-bottom:7.5pt;line-height:15.0pt;background:
+whitesmoke;word-break:break-all'><span lang=EN-US style='font-size:10.0pt;
+font-family:Consolas;color:#333333'>       1        2        3        4       
+5        6        7        8 </span></p>
+
+<p class=MsoNormal style='margin-bottom:7.5pt;line-height:15.0pt;background:
+whitesmoke;word-break:break-all'><span lang=EN-US style='font-size:10.0pt;
+font-family:Consolas;color:#333333'>survived survived survived     died
+survived     died survived     died </span></p>
+
+<p class=MsoNormal style='margin-bottom:7.5pt;line-height:15.0pt;background:
+whitesmoke;word-break:break-all'><span lang=EN-US style='font-size:10.0pt;
+font-family:Consolas;color:#333333'>       9       10 </span></p>
+
+<p class=MsoNormal style='margin-bottom:7.5pt;line-height:15.0pt;background:
+whitesmoke;word-break:break-all'><span lang=EN-US style='font-size:10.0pt;
+font-family:Consolas;color:#333333'>survived     died </span></p>
+
+<p class=MsoNormal style='margin-bottom:7.5pt;line-height:15.0pt;background:
+whitesmoke;word-break:break-all'><span lang=EN-US style='font-size:10.0pt;
+font-family:Consolas;color:#333333'>Levels: died survived</span></p>
+
+<p class=MsoNormal style='margin-top:7.5pt;margin-right:0cm;margin-bottom:7.5pt;
+margin-left:0cm;line-height:30.0pt'><b><span lang=EN-US style='font-size:18.0pt;
+font-family:"inherit",serif;color:#333333'>&nbsp;</span></b></p>
+
+<p class=MsoNormal style='margin-top:7.5pt;margin-right:0cm;margin-bottom:7.5pt;
+margin-left:0cm;line-height:30.0pt'><b><span lang=EN-US style='font-size:18.0pt;
+font-family:"inherit",serif;color:#333333'>&nbsp;</span></b></p>
+
+<p class=MsoNormal style='margin-top:7.5pt;margin-right:0cm;margin-bottom:7.5pt;
+margin-left:0cm;line-height:30.0pt'><b><span lang=EN-US style='font-size:18.0pt;
+font-family:"inherit",serif;color:#333333'>Évaluation des performances</span></b></p>
+
+<p class=MsoNormal style='margin-bottom:7.5pt;line-height:normal'><span
+lang=FR style='font-size:10.5pt;font-family:"Helvetica",sans-serif;color:#333333'>Pour
+évaluer correctement les performances de l'arbre simplifié, il faut utiliser
+une procédure de type validation croisée en plus de celle qui est intégrée
+dans&nbsp;</span><span lang=FR style='font-size:9.0pt;font-family:Consolas;
+color:#DD1144;background:#F7F7F9'>rpart</span><span lang=FR style='font-size:
+10.5pt;font-family:"Helvetica",sans-serif;color:#333333'>&nbsp;pour choisir la
+complexité de l'arbre. Le package&nbsp;</span><span lang=FR><a
+href="http://caret.r-forge.r-project.org/"><span style='font-size:10.5pt;
+font-family:"Helvetica",sans-serif;color:#0088CC'>caret</span></a></span><span
+lang=FR style='font-size:10.5pt;font-family:"Helvetica",sans-serif;color:#333333'>&nbsp;facilite
+cette opération en proposant des fonctions de découpage des données bien
+conçues.</span></p>
+
+<p class=MsoNormal style='margin-bottom:7.5pt;line-height:normal'><span
+lang=FR style='font-size:10.5pt;font-family:"Helvetica",sans-serif;color:#333333'>Dans
+cette prise en main, nous nous contentons d'évaluer les performances sur les
+données d'apprentissage ce qui sur-estime la qualité du modèle. Il s'agit
+simplement d'une illustration ! Le principe est de s'appuyer sur la
+fonction&nbsp;</span><span lang=FR style='font-size:9.0pt;font-family:Consolas;
+color:#DD1144;background:#F7F7F9'>predict</span><span lang=FR style='font-size:
+10.5pt;font-family:"Helvetica",sans-serif;color:#333333'>&nbsp;et sur la
+fonction&nbsp;</span><span lang=FR style='font-size:9.0pt;font-family:Consolas;
+color:#DD1144;background:#F7F7F9'>table</span><span lang=FR style='font-size:
+10.5pt;font-family:"Helvetica",sans-serif;color:#333333'>&nbsp;pour obtenir une
+matrice de confusion. </span><span lang=EN-US style='font-size:10.5pt;
+font-family:"Helvetica",sans-serif;color:#333333'>L'appel suivant</span></p>
+
+<p class=MsoNormal style='margin-bottom:7.5pt;line-height:15.0pt;background:
+whitesmoke;word-break:break-all'><b><span lang=EN-US style='font-size:9.0pt;
+font-family:Consolas;color:#003080'>table</span></b><span lang=EN-US
+style='font-size:9.0pt;font-family:Consolas;color:#333333'>(ptitanic</span><span
+lang=EN-US style='font-size:9.0pt;font-family:Consolas;color:#303030'>$</span><span
+lang=EN-US style='font-size:9.0pt;font-family:Consolas;color:#333333'>survived,
+predict(ptitanicOptimal, ptitanic, type</span><span lang=EN-US
+style='font-size:9.0pt;font-family:Consolas;color:#303030'>=</span><span
+lang=EN-US style='font-size:9.0pt;font-family:Consolas;color:#333333;
+background:#FFF0F0'>&quot;class&quot;</span><span lang=EN-US style='font-size:
+9.0pt;font-family:Consolas;color:#333333'>))</span></p>
+
+<p class=MsoNormal style='margin-bottom:7.5pt;line-height:normal'><span
+lang=FR style='font-size:10.5pt;font-family:"Helvetica",sans-serif;color:#333333'>produit
+ainsi la matrice de confusion suivante :</span></p>
+
+<p class=MsoNormal style='margin-bottom:7.5pt;line-height:15.0pt;background:
+whitesmoke;word-break:break-all'><span lang=FR style='font-size:10.0pt;
+font-family:Consolas;color:#333333'>         died survived</span></p>
+
+<p class=MsoNormal style='margin-bottom:7.5pt;line-height:15.0pt;background:
+whitesmoke;word-break:break-all'><span lang=FR style='font-size:10.0pt;
+font-family:Consolas;color:#333333'>died      752       57</span></p>
+
+<p class=MsoNormal style='margin-bottom:7.5pt;line-height:15.0pt;background:
+whitesmoke;word-break:break-all'><span lang=FR style='font-size:10.0pt;
+font-family:Consolas;color:#333333'>survived  173      327</span></p>
+
+<p class=MsoNormal style='margin-bottom:7.5pt;line-height:normal'><span
+lang=FR style='font-size:10.5pt;font-family:"Helvetica",sans-serif;color:#333333'>On
+constate que la qualité de la prédiction dépend beaucoup de la classe. En
+effet, sur les 809 passagers décédés, le taux de prévisions correctes est de 93
+% environ, alors que sur les 500 survivants, il n'est que de 65 % environ.</span></p>
+
+<p class=MsoNormal><span lang=FR>&nbsp;</span></p>
+
+</div>
+
+</body>
+
+</html>
