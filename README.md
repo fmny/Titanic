@@ -19,6 +19,8 @@ Utilisation de la fonction Rpart sur les passagers du Titanic pour créer un arb
 Préparation des données  
 On travaille ici sur les données Titanic disponible dans le package rpart.plot. On charge les deux packages puis les données comme ceci :  
 
+##ajouter une image de la base de données
+
 library(rpart)  
 library(rpart.plot)  
 data(ptitanic)  
@@ -30,6 +32,24 @@ Les données décrivent 1046 passagers selon 6 variables :
 •	age donne l'âge du passager exprimé en années  
 •	sibsp donne le nombre de frères, sœurs, mari ou épouse à bord  
 •	parch donne le nombre d'enfants ou de parents à bord.  
+
+#Visualisation des 10 premiers enregistrements de la base  
+Id	pclass	survived	  sex	      age	sibsp	parch  
+1	  1st	    survived	  female	  29	0	0  
+2	  1st	    survived	  male	    0.916700006	1	2  
+3	  1st	    died	      female	    2	1	2  
+4	  1st	    died	      male	    30	1	2  
+5	  1st	    died	      female	  25	1	2  
+6	  1st	    survived	   male	    48	0	0  
+7	  1st	    survived	  female	  63	1	0  
+8	  1st	    died	      male	    39	0	0  
+9	  1st	    survived	  female	  53	2	0  
+10	1st	    died	      male	    71	0	0  
+
+
+
+
+
 
 Les trois dernières variables sont numériques alors que les trois premières sont nominales. Il faut bien s'assurer que la représentation en R des variables respecte leur nature. Pour ce faire, on utilise :  
 lapply(ptitanic,class)  
