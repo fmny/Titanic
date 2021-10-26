@@ -6,7 +6,9 @@ Lpackage rpart nous permet de construire l'arbre optimal pour effectuer notre pr
 
 ![Arbre titanic optimal](https://github.com/fmny/Titanic/blob/main/Arbre%20titanic.jpeg)
 
-Pour plus de détail sur la construction de l'arbre, cliquer sur le lien du code Titanic.r.  
+Pour plus de détail sur la construction de l'arbre, cliquer sur le lien du code Titanic.r  
+
+
 
 
 
