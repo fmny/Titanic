@@ -14,7 +14,7 @@ data(ptitanic)
 setwd("C:\\Users\\Francis\\R_new\\titanic")
 #write.csv(ptitanic,file=".\\Data\\titanic.csv")
 
-
+#blabla
 
 library(e1071)
 g <- naiveBayes(survived ~ ., data = ptitanic)
